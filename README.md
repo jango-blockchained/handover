@@ -6,7 +6,7 @@ A plugin for `hsd` to enable DNS resolution on external networks like Ethererum.
 
 Before installing, you need an Infura API key. Go to infura.io, create a new
 project and get a free API key. The plugin requires master branch of `hsd`
-(currently unreleased). 
+(currently unreleased).
 
 ```
 cd /path/to/hsd
@@ -25,7 +25,7 @@ hsd \
  --plugins=handover \
  --handover-infura-projectid=<...> \
  --handover-infura-projectsecret=<...>
-``` 
+```
 
 Environment variables:
 
@@ -63,7 +63,7 @@ $ dig @127.0.0.1 -p 5350 fuckingfucker.eth +short
 Resolve a decentralized subdomain of a Handshake TLD:
 
 ```
-$ dig @127.0.0.1 -p 5350 certified.badass +short
+$ dig @127.0.0.1 -p 5350 certified.shrtr +short
 184.73.82.1
 ```
 
@@ -74,7 +74,7 @@ See [HIP-0005](https://github.com/handshake-org/HIPs/pull/10) for more details.
 Notice how the NS record was set for this Handshake domain:
 
 ```
-$ hsd-rpc getnameresource badass
+$ hsd-rpc getnameresource shrtr
 
 {
   "records": [
@@ -87,14 +87,14 @@ $ hsd-rpc getnameresource badass
 ```
 
 The `_eth` TLD indicates an abstract (forked) ENS contract on Ethereum, appended
-to the contract's address. On Ethereum, the domain `certified.badass` was registered
+to the contract's address. On Ethereum, the domain `certified.shrtr` was registered
 with this contract, and its DNS records were set using [EIP-1185](https://eips.ethereum.org/EIPS/eip-1185):
 
 ```
 $ node
 
 > const {wire} = require('bns')
-> wire.Record.fromJSON({name:'certified.badass.', ttl: 60000, class: 'IN', type: 'A', data: {address: '184.73.82.1'}}).encode().toString('hex')
+> wire.Record.fromJSON({name:'certified.shrtr.', ttl: 60000, class: 'IN', type: 'A', data: {address: '184.73.82.1'}}).encode().toString('hex')
 '096365727469666965640662616461737300000100010000ea600004b8495201'
 ```
 
@@ -114,9 +114,9 @@ There is one more complication which is that recursive resolvers (like unbound)
 may have `qname-minimisation` set, which means the resolver begins its recursion
 by ONLY querying the TLD (as opposed to sending the full query string). To deal
 with this, if the plugin detects a NS pointing to `.eth` or `._eth` but does
-not have a full query string (i.e. only one label, `.badass`) the plugin returns
+not have a full query string (i.e. only one label, `.shrtr`) the plugin returns
 an empty response with SOA. This tricks the recursive resolver into making a new
-request with the full query string (i.e. `certified.badass`).
+request with the full query string (i.e. `certified.shrtr`).
 
 ## Future Work
 
@@ -141,7 +141,7 @@ brantly.eth          url                  http://brantly.xyz/
 ```
 
 Subdomains: The plugin has not been tested on sub domains of names registered
-at the ENS contract root (e.g. `whynot.fuckingfucker.eth` or `yesiam.certified.badass`).
+at the ENS contract root (e.g. `whynot.fuckingfucker.eth` or `yesiam.certified.shrtr`).
 
 ## Development
 
